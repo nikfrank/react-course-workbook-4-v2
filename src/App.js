@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 
 import CoinPicker from './CoinPicker';
-import RatesChart from './RatesChart';
 
 class App extends Component {
   state = {
@@ -35,10 +34,6 @@ class App extends Component {
                     toCoin={this.state.toCoin}
                     setFrom={this.setFrom}
                     setTo={this.setTo}/>
-
-        { this.state.historicalRates.length ? (
-            <RatesChart rates={this.state.historicalRates}/>
-        ) : null }
       </div>
     );
   }
