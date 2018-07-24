@@ -36,9 +36,7 @@ class App extends Component {
                     setFrom={this.setFrom}
                     setTo={this.setTo}/>
 
-        { this.state.historicalRates.length ? (
-            <RatesChart rates={this.state.historicalRates}/>
-        ) : null }
+        <RatesChart rates={this.state.historicalRates}/>
       </div>
     );
   }
