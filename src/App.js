@@ -1,44 +1,36 @@
 import React, { Component } from 'react';
 import './App.css';
 
-import CoinPicker from './CoinPicker';
-import RatesChart from './RatesChart';
+import ExchangeWidget from './ExchangeWidget';
 
 class App extends Component {
   state = {
-    fromCoin: '',
-    toCoin: '',
-    historicalRates: [],
+    widgetIds: [ ],
   }
 
-  componentDidUpdate(prevProps, prevState){
-    if( this.state.toCoin && this.state.fromCoin &&
-        ( (this.state.fromCoin !== prevState.fromCoin ) ||
-          (this.state.toCoin !== prevState.toCoin ) ) ) {
+  addWidget = ()=> this.setState(state => ({
+    widgetIds: state.widgetIds.concat( 'widget'+Math.random() )
+  }) )
 
-      fetch(`https://min-api.cryptocompare.com/data/histoday?`+
-            `fsym=${this.state.fromCoin}&tsym=${this.state.toCoin}&limit=60&aggregate=3&e=CCCAGG`)
-        .then( response => response.json() )
-        .then( responseJson => {
-          this.setState({ historicalRates: responseJson.Data });
-        });
-    }
-  }
-  
-  setFrom = event=> this.setState({ fromCoin: event.target.value })
-  setTo = event=> this.setState({ toCoin: event.target.value })
-  
+  removeWidget = ({ target: { id } })=>
+    this.setState(state => ({
+      widgetIds: state.widgetIds.filter( wid => wid !== id )
+    }) )
+      
   render() {
+    const { widgetIds } = this.state;
+    
     return (
       <div className="App">
-        <CoinPicker fromCoin={this.state.fromCoin}
-                    toCoin={this.state.toCoin}
-                    setFrom={this.setFrom}
-                    setTo={this.setTo}/>
-
-        { this.state.historicalRates.length ? (
-            <RatesChart rates={this.state.historicalRates}/>
-        ) : null }
+        <button onClick={this.addWidget}>+</button>
+        {
+          widgetIds.map( id => (
+            <div key={id}>
+              <ExchangeWidget/>
+              <button onClick={this.removeWidget} id={id}>X</button>
+            </div>
+          ) )
+        }
       </div>
     );
   }
